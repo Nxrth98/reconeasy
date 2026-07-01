@@ -1530,7 +1530,7 @@ If you cannot determine a field, use null.` }
     document.getElementById('aiAction').style.display = 'block';
   } catch(err) {
     bar.classList.remove('loading');
-    document.getElementById('aiBarText').textContent = 'Could not read slip automatically. Fill in manually.';
+    document.getElementById('aiBarText').textContent = 'Error: ' + err.message;
   }
 }
 
