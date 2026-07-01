@@ -694,6 +694,9 @@
 
   <div class="capture-section">
 
+    <!-- Test Worker Button -->
+    <button class="btn btn-secondary" style="margin-bottom:16px;" onclick="testWorker()">🔧 Test AI Connection</button>
+
     <!-- Photo zone -->
     <div class="photo-zone" id="photoZone">
       <input type="file" accept="image/*" capture="environment" id="slipInput" onchange="handleSlipPhoto(this)">
@@ -1481,6 +1484,27 @@ function setPhotoPreview(dataUrl) {
   if (!img) { img = document.createElement('img'); zone.prepend(img); }
   img.src = dataUrl;
   document.getElementById('photoReplace').style.display = 'block';
+}
+
+async function testWorker() {
+  showToast('Testing worker connection...');
+  try {
+    const response = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 10,
+        messages: [{ role: 'user', content: 'Say OK' }]
+      })
+    });
+    const text = await response.text();
+    showToast('Worker response: ' + text.slice(0, 100));
+    alert('Status: ' + response.status + '\nResponse: ' + text.slice(0, 200));
+  } catch(err) {
+    showToast('Worker error: ' + err.message);
+    alert('Error: ' + err.message);
+  }
 }
 
 async function compressImage(dataUrl, maxWidth = 800, quality = 0.5) {
