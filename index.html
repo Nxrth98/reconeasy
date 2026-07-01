@@ -1483,7 +1483,7 @@ function setPhotoPreview(dataUrl) {
   document.getElementById('photoReplace').style.display = 'block';
 }
 
-async function compressImage(dataUrl, maxWidth = 1024, quality = 0.7) {
+async function compressImage(dataUrl, maxWidth = 800, quality = 0.5) {
   return new Promise((resolve) => {
     const img = new Image();
     img.onload = function() {
@@ -1498,7 +1498,14 @@ async function compressImage(dataUrl, maxWidth = 1024, quality = 0.7) {
       canvas.height = height;
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, width, height);
-      resolve(canvas.toDataURL('image/jpeg', quality));
+      // Keep compressing until under 200KB
+      let q = quality;
+      let result = canvas.toDataURL('image/jpeg', q);
+      while (result.length > 200000 && q > 0.1) {
+        q -= 0.1;
+        result = canvas.toDataURL('image/jpeg', q);
+      }
+      resolve(result);
     };
     img.src = dataUrl;
   });
@@ -1513,9 +1520,11 @@ async function callAIReadSlip(imageData) {
 
   try {
     // Compress image before sending
-    const compressed = await compressImage(imageData, 1024, 0.7);
+    const compressed = await compressImage(imageData, 800, 0.5);
     const base64 = compressed.split(',')[1];
     const mediaType = 'image/jpeg';
+    const sizeKB = Math.round(base64.length * 0.75 / 1024);
+    document.getElementById('aiBarText').textContent = `Reading slip (${sizeKB}KB)…`;
 
     const response = await fetch(WORKER_URL, {
       method: 'POST',
@@ -1553,7 +1562,7 @@ If you cannot determine a field, use null.` }
     document.getElementById('aiAction').style.display = 'block';
   } catch(err) {
     bar.classList.remove('loading');
-    document.getElementById('aiBarText').textContent = 'Error: ' + err.message;
+    document.getElementById('aiBarText').textContent = 'Error: ' + (err.message || JSON.stringify(err));
   }
 }
 
