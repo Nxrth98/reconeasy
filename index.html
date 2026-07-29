@@ -331,6 +331,51 @@
   .av{width:30px;height:30px;border-radius:var(--pill);background:var(--green-soft);color:var(--green-deep);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;overflow:hidden;flex-shrink:0}
   .av img{width:100%;height:100%;object-fit:cover}
   .chip-user span{font-size:13.5px;font-weight:580;color:var(--ink-2)}
+
+  /* ── INTRO CARD ── */
+  .intro{
+    display:flex;gap:14px;background:var(--card);border-radius:22px;padding:19px 20px;
+    margin:2px 0 28px;cursor:pointer;box-shadow:0 2px 10px rgba(22,45,32,.045);
+    transition:transform .13s;
+  }
+  .intro:active{transform:scale(.985)}
+  .intro-ic{width:42px;height:42px;border-radius:14px;background:var(--green-soft);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+  .intro-ic svg{width:20px;height:20px;color:var(--green-deep)}
+  .intro-body h4{font-size:15.5px;font-weight:660;letter-spacing:-.02em;margin-bottom:5px}
+  .intro-body p{font-size:13.5px;color:var(--ink-2);line-height:1.5;margin-bottom:10px}
+  .intro-link{font-size:13px;font-weight:640;color:var(--green);display:inline-flex;align-items:center;gap:5px}
+
+  /* ── GUIDE SCREEN ── */
+  .tabs{display:flex;gap:8px;margin-bottom:22px;overflow-x:auto;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{
+    flex-shrink:0;padding:11px 18px;border-radius:var(--pill);font-size:14px;font-weight:620;
+    background:var(--card);color:var(--ink-2);border:none;cursor:pointer;font-family:inherit;
+    transition:all .14s;
+  }
+  .tab.on{background:var(--green-deep);color:#fff}
+
+  .rulegroup{margin-bottom:26px}
+  .rulegroup h5{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green-deep);margin:0 0 12px 2px;display:flex;align-items:center;gap:8px}
+  .rulegroup h5 svg{width:15px;height:15px}
+  .rule{
+    display:flex;gap:12px;background:var(--card);border-radius:18px;padding:15px 16px;
+    margin-bottom:9px;box-shadow:0 2px 8px rgba(22,45,32,.04);
+  }
+  .rule-ic{width:26px;height:26px;border-radius:var(--pill);background:var(--green-soft);flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .rule-ic svg{width:13px;height:13px;color:var(--green-deep)}
+  .rule.warn .rule-ic{background:rgba(232,163,61,.18)}
+  .rule.warn .rule-ic svg{color:#B4761F}
+  .rule p{font-size:14.5px;line-height:1.48;color:var(--ink)}
+  .rule b{font-weight:660}
+
+  .faq{background:var(--card);border-radius:18px;padding:16px 18px;margin-bottom:10px;box-shadow:0 2px 8px rgba(22,45,32,.04)}
+  .faq summary{font-size:15px;font-weight:640;letter-spacing:-.015em;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:'';width:9px;height:9px;border-right:2px solid var(--ink-3);border-bottom:2px solid var(--ink-3);transform:rotate(45deg);flex-shrink:0;transition:transform .2s}
+  .faq[open] summary::after{transform:rotate(-135deg)}
+  .faq p{font-size:14px;color:var(--ink-2);line-height:1.55;margin-top:12px}
+
 </style>
 </head>
 <body>
@@ -358,12 +403,12 @@
     </svg>
   </div>
   <h1 class="auth-h1">ReconEasy</h1>
-  <p class="auth-sub">Snap the slip, select the vote number, and let the app reconcile in seconds.</p>
+  <p class="auth-sub">Snap the slip, tag the vote number, and let the office reconcile in seconds.</p>
   <button class="btn btn-primary" onclick="signInWithGoogle()">
     <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" opacity=".95"/><path fill="#fff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" opacity=".8"/><path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" opacity=".65"/><path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
     Continue with Google
   </button>
-  <p class="auth-foot">Protected finance workspace. Entries are logged against your name and synced to your own Google Drive.</p>
+  <p class="auth-foot">Protected finance workspace. Entries are logged against your name and synced to your own Drive.</p>
 </div>
 
 <!-- ══ HOME ══ -->
@@ -373,9 +418,21 @@
       <span id="greetWord">Welcome back,</span>
       <h1 id="greetName">There</h1>
     </div>
+    <button class="icon-btn" onclick="goGuide()" title="Guide & policies" style="margin-right:8px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="11.5"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+    </button>
     <button class="icon-btn" onclick="confirmSignOut()" title="Sign out">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
     </button>
+  </div>
+
+  <div class="intro" onclick="goGuide()">
+    <div class="intro-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg></div>
+    <div class="intro-body">
+      <h4>What ReconEasy is for</h4>
+      <p>Photograph a slip, tag its vote and project, and both card and cash reconciliations stay organised and ready for the office — no more hunting for paper at month-end.</p>
+      <span class="intro-link">Read the full guide &amp; policies <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+    </div>
   </div>
 
   <div class="hero">
@@ -411,7 +468,7 @@
   <div style="margin-top:26px">
     <button class="btn btn-ghost" onclick="syncAll()" id="syncAllBtn">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
-      Sync everything to Google Drive
+      Sync everything to Drive
     </button>
     <p style="text-align:center;font-size:12.5px;color:var(--ink-3);margin-top:11px" id="syncStatus"></p>
   </div>
@@ -476,7 +533,7 @@
 
   <div class="fgroup">
     <label class="label">Merchant</label>
-    <input type="text" class="field" id="fMerchant" placeholder="e.g. Engen Hluhluwe">
+    <input type="text" class="field" id="fMerchant" placeholder="e.g. Engen Hoedspruit">
   </div>
 
   <div class="fgroup">
@@ -486,11 +543,7 @@
 
   <div class="fgroup">
     <label class="label">Project / Department</label>
-    <div class="pick" id="projPick">
-      <svg class="search-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" class="field" id="fProject" placeholder="Type project or department" oninput="searchProjects(this.value)" onfocus="searchProjects(this.value)" autocomplete="off">
-      <div class="results" id="projResults"></div>
-    </div>
+    <input type="text" class="field" id="fProject" placeholder="e.g. WildOceans, Marine Operations" autocomplete="off">
   </div>
 
   <div class="fgroup">
@@ -590,6 +643,97 @@
     <div class="xico warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div>
     <div class="xbody"><h4>Clear entries</h4><p>Start a fresh month. Cannot be undone.</p></div>
     <button class="btn btn-danger btn-sm" onclick="askClear()">Clear</button>
+  </div>
+</div>
+
+<!-- ══ GUIDE ══ -->
+<div id="screen-guide" class="screen">
+  <div class="topbar">
+    <button class="icon-btn" onclick="goHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <div class="topbar-mid"><h2>Guide &amp; policies</h2><p>How to use ReconEasy</p></div>
+    <div class="spacer-44"></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab on" data-t="how" onclick="guideTab('how',this)">How it works</button>
+    <button class="tab" data-t="cc" onclick="guideTab('cc',this)">Credit Card</button>
+    <button class="tab" data-t="pc" onclick="guideTab('pc',this)">Petty Cash</button>
+    <button class="tab" data-t="faq" onclick="guideTab('faq',this)">FAQ</button>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div id="tab-how" class="tabpane">
+    <div class="rulegroup">
+      <h5><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20v-6M6 20V10M18 20V4"/></svg>Quick start</h5>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3.5"/></svg></div><p><b>1. Photograph the slip</b> — as soon as you get it, snap it in Credit Card or Petty Cash. Don't wait for month-end.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3Z"/></svg></div><p><b>2. Let the AI read it</b> — merchant, amount and category are suggested automatically. Check them, then tap Apply.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><p><b>3. Add the vote &amp; project</b> — search by name or number. If unsure, ask your project manager before saving.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div><p><b>4. Describe it in 60 characters</b> — short and specific, e.g. "Diesel for anti-poaching patrol vehicle".</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></div><p><b>5. Save, then sync</b> — entries stay on your device until you tap Sync in Export. That's what pushes them to Drive and Sheets.</p></div>
+    </div>
+    <div class="rulegroup">
+      <h5><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="11.5"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>Good to know</h5>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>The green dot on an entry means it has a vote, project and description. Amber means it still needs attention before month-end.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Keep the original paper slip even after photographing it — the signed policies below still require the physical copy to reach Finance.</p></div>
+    </div>
+  </div>
+
+  <!-- CREDIT CARD -->
+  <div id="tab-cc" class="tabpane" style="display:none">
+    <div class="rulegroup">
+      <h5>Before you spend</h5>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>The card is for <b>work purposes only</b> and has a set monthly limit — get your manager's sign-off before spending, not after.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Personal expenses are <b>never</b> allowed on the card — this includes things like an Uber from home to your normal work base.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Issuing the card is a privilege, not a right — it can be withdrawn at any time, and unexplained spend is deducted from your salary.</p></div>
+    </div>
+    <div class="rulegroup">
+      <h5>Keeping it secure</h5>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Never share your PIN, and never let the card out of sight when it's being swiped.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Never send the full 16-digit number or CVV by email or WhatsApp — only the last 4 digits, and only when Finance needs them.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Watch your transaction SMSes closely — report anything unusual to the bank immediately, then to your finance manager.</p></div>
+      <div class="rule warn"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><p><b>Card lost or stolen?</b> Call Investec on <b>0860 110 161</b> (or +27 11 286 9663 abroad) immediately to stop it, then get a police case number and tell your finance manager.</p></div>
+    </div>
+    <div class="rulegroup">
+      <h5>Slips &amp; deadlines</h5>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Original slips and vouchers are due to Finance by the <b>6th of every month</b> for the previous month's statement.</p></div>
+      <div class="rule warn"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><p>A speedpoint slip alone isn't enough — you need the actual invoice or till slip too, or it will be rejected.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Travelling internationally? Contact Investec at least <b>two weeks</b> ahead — they'll need your passport, ticket and travel details.</p></div>
+    </div>
+  </div>
+
+  <!-- PETTY CASH -->
+  <div id="tab-pc" class="tabpane" style="display:none">
+    <div class="rulegroup">
+      <h5>Before you spend</h5>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Get your manager's advance approval for petty cash spend, same as the card — plan the project cost before you spend, not after.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>No personal expenses — the same home-to-work Uber rule applies to cash as it does to the card.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>New to holding petty cash? A background check is required first, and you'll be issued your own petty cash vote number.</p></div>
+    </div>
+    <div class="rulegroup">
+      <h5>Getting a valid slip</h5>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>A till slip or invoice is required at the point of sale — it's on you to make sure you're given one.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Handwritten invoices are allowed, but only if they include: supplier's name &amp; address, WILDTRUST as the buyer (plus VAT numbers if vatable), a 10-digit contact number, an ID or registration number, the date, what was bought, and a signature or stamp.</p></div>
+      <div class="rule warn"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><p>No slip available at all (e.g. informal transport)? Get a written, signed note from the provider with their contact details, and countersign it yourself.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Affidavits for a missing slip are only accepted for theft or genuinely exceptional cases — not for a slip you simply misplaced.</p></div>
+    </div>
+    <div class="rulegroup">
+      <h5>Deadlines &amp; balances</h5>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Your recon, signed off by your manager, is due to Finance by the <b>6th of every month</b>.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Passing petty cash to a colleague? Both of you sign a petty cash receipt, and it must go in with your monthly recon.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Holding more than <b>R2,000</b> in cash can be flagged for review — keep your balance reconciled and don't let it build up.</p></div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div id="tab-faq" class="tabpane" style="display:none">
+    <details class="faq" open><summary>Do I still need to keep the paper slip?</summary><p>Yes. Photographing it in the app doesn't replace the original — Finance still needs the physical slip or invoice by the 6th of the month.</p></details>
+    <details class="faq"><summary>What if the AI reads the slip wrong?</summary><p>It happens with faded or crumpled receipts. Just correct the date, amount, merchant or category before saving — nothing is locked in until you tap Save.</p></details>
+    <details class="faq"><summary>I can't find the right vote number — what do I do?</summary><p>Search by project name instead of the code. If it's still not there, check with your project manager before guessing — an entry can always be edited later once you have the right vote.</p></details>
+    <details class="faq"><summary>Does saving an entry send it anywhere?</summary><p>No. Entries stay on your phone until you open a module's Export screen and tap Sync — that's the only step that writes to Google Sheets or uploads receipts to Drive.</p></details>
+    <details class="faq"><summary>What happens if I lose my phone?</summary><p>Any entries not yet synced are only stored on that device. Sync often, especially after a busy trip, so nothing depends on a single phone.</p></details>
+    <details class="faq"><summary>Can I use this for a personal purchase by mistake?</summary><p>No — both the credit card and petty cash agreements are clear that personal spend is never permitted, including trips like an Uber from home to your usual work base. Any personal use is treated as a debt owed to WildTrust.</p></details>
+    <details class="faq"><summary>My card was lost or possibly compromised — what first?</summary><p>Call Investec straight away on 0860 110 161 (+27 11 286 9663 from abroad) to stop the card, then get a police case number and let your finance manager know.</p></details>
+    <details class="faq"><summary>Who do I ask if I'm unsure about a rule?</summary><p>Your project manager or the finance team — both agreements are reviewed by them, and it's always better to check first than to have a claim rejected later.</p></details>
   </div>
 </div>
 
@@ -758,20 +902,9 @@ function clearVote(){
   $('voteChosen').style.display='none';
   $('fVote').value=''; $('voteResults').classList.remove('show');
 }
-function searchProjects(q){
-  const box=$('projResults'); project=(q||'').trim();
-  const s=project.toLowerCase();
-  if(!s){ box.classList.remove('show'); return; }
-  const hits = PROJECTS.filter(p=>p.toLowerCase().includes(s)).slice(0,10);
-  if(!hits.length){ box.classList.remove('show'); return; }
-  box.innerHTML = hits.map(p=>`<div class="res" onclick="pickProject('${esc(p).replace(/'/g,"\\'")}')"><div class="res-d" style="color:var(--ink);font-size:15px">${esc(p)}</div></div>`).join('');
-  box.classList.add('show');
-}
-function pickProject(p){ project=p; $('fProject').value=p; $('projResults').classList.remove('show'); }
 
 document.addEventListener('click', e=>{
   if(!e.target.closest('#votePick')) $('voteResults').classList.remove('show');
-  if(!e.target.closest('#projPick')) $('projResults').classList.remove('show');
 });
 
 /* ═══════════ CATEGORY CHIPS ═══════════ */
@@ -898,6 +1031,16 @@ function goDetail(id){
 }
 function editEntry(){ goCapture(curId); }
 function goExport(){ $('xSub').textContent = modName(mod); show('export'); }
+function goGuide(){
+  document.querySelectorAll('#screen-guide .tab').forEach(t=>t.classList.toggle('on', t.dataset.t==='how'));
+  document.querySelectorAll('#screen-guide .tabpane').forEach(p=>p.style.display = p.id==='tab-how' ? '' : 'none');
+  show('guide');
+}
+function guideTab(name, btn){
+  document.querySelectorAll('#screen-guide .tab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('#screen-guide .tabpane').forEach(p=>p.style.display = (p.id==='tab-'+name) ? '' : 'none');
+}
 
 /* ═══════════ PHOTO + AI ═══════════ */
 function resetPhoto(){
@@ -964,7 +1107,7 @@ async function readSlip(data){
           {type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},
           {type:'text',text:`Read this South African receipt for an NGO expense reconciliation. Reply with ONLY a JSON object, no markdown fences, no commentary:
 {"merchant":"clean merchant name, max 40 chars","amount":"total paid, digits and decimal point only, no R symbol","date":"YYYY-MM-DD if visible else null","category":"exactly one of: ${CATEGORIES.join(' | ')}","description":"specific 60-character-max description of what was bought and why it fits that category"}
-Pick the category from the items on the slip: a morning meal is Breakfast, a midday meal Lunch, an evening meal Dinner, per-diem style food claims Subsistence, hotels or lodges Accommodation, petrol or diesel Fuel, flights ubers car hire tolls Travel, tools hardware or devices Equipment, supermarket shopping Groceries, pens paper printing Stationery, prepaid airtime or data bundles "Airtime & Data", bank or ATM withdrawals "Withdrawals", venue hire or event catering "Venue & Catering", courier or postage Courier, anything else Other. Use null for any field you truly cannot read.`}
+Pick the category from the items on the slip: a morning meal is Breakfast, a midday meal Lunch, an evening meal Dinner, per-diem style food claims Subsistence, hotels or lodges Accommodation, petrol or diesel Fuel, flights ubers car hire tolls Travel, tools hardware or devices Equipment, supermarket shopping Groceries, pens paper printing Stationery, prepaid airtime or data bundles "Airtime & Data", an ATM or cash withdrawal slip Withdrawals, venue hire or event catering "Venue & Catering", courier or postage Courier, anything else Other. Use null for any field you truly cannot read.`}
         ]}]
       })
     });
