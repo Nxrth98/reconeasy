@@ -1108,8 +1108,20 @@ async function readSlip(data){
         messages:[{role:'user',content:[
           {type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},
           {type:'text',text:`Read this South African receipt for an NGO expense reconciliation. Reply with ONLY a JSON object, no markdown fences, no commentary:
-{"merchant":"clean merchant name, max 40 chars","amount":"total paid, digits and decimal point only, no R symbol","date":"YYYY-MM-DD if visible else null","category":"exactly one of: ${CATEGORIES.join(' | ')}","description":"specific 60-character-max description of what was bought and why it fits that category"}
-Pick the category from the items on the slip: a morning meal is Breakfast, a midday meal Lunch, an evening meal Dinner, per-diem style food claims Subsistence, hotels or lodges Accommodation, petrol or diesel Fuel, flights ubers car hire tolls Travel, tools hardware or devices Equipment, supermarket shopping Groceries, pens paper printing Stationery, prepaid airtime or data bundles "Airtime & Data", an ATM or cash withdrawal slip Withdrawals, venue hire or event catering "Venue & Catering", courier or postage Courier, anything else Other. Use null for any field you truly cannot read.`}
+{"merchant":"clean merchant name, max 40 chars","amount":"total paid, digits and decimal point only, no R symbol","date":"YYYY-MM-DD if visible else null","category":"exactly one of: ${CATEGORIES.join(' | ')}","description":"60-character-max transaction description written in WildOceans house style, see rules below"}
+
+Pick the category from the items on the slip: a morning meal is Breakfast, a midday meal Lunch, an evening meal Dinner, per-diem style food claims Subsistence, hotels or lodges Accommodation, petrol or diesel Fuel, flights ubers car hire tolls Travel, tools hardware or devices Equipment, supermarket shopping Groceries, pens paper printing Stationery, prepaid airtime or data bundles "Airtime & Data", an ATM or cash withdrawal slip Withdrawals, venue hire or event catering "Venue & Catering", courier or postage Courier, anything else Other. Use null for any field you truly cannot read.
+
+WILDOCEANS DESCRIPTION HOUSE STYLE — the description must follow this exact tone and shape, based on real examples from past reconciliations:
+"Uber to Musgrave for Sibusiso" · "Rental vehicle re-fuel in Manguzi" · "oThongathi Toll gate payment returning to Durban" · "Fresh produce shopping for Angra Pequena cruise" · "Subsistence for Sibusiso Mkhize" · "Return flights for Vivienne-Angra Pequena cruise. CPT/DBN"
+
+Rules for writing it:
+- Lead with the expense type or item first, then "for" or "in"/"to" plus the where, or the specific context if it's directly on the slip (e.g. a route, a city, a printed passenger name on a ticket).
+- Keep it short and plain — never write a narrative sentence, never explain "why it fits the category."
+- Never invent or guess a person's name, colleague, project name, or trip name — only use a name if it is printed directly on the document itself (e.g. a boarding pass or invoice addressee). If no name is visible, describe the action and location only, e.g. "Uber to Musgrave" or "Diesel for rental vehicle", and leave it at that — the person will add who it's for themselves.
+- For generic items like tools or hardware, just name the item plainly, e.g. "Purchasing cordless drill" — do not guess who it's for or which project.
+- Never include a trip name, campaign name, or project name unless it is literally printed on the slip — that context belongs in a separate comments field the person fills in themselves, not in this description.
+- If the slip shows a quantity relevant to a shared cost (e.g. "13 items" on a lunch bill), you may reflect that plainly, e.g. "Lunch for team" rather than guessing a headcount.`}
         ]}]
       })
     });
