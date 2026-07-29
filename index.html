@@ -1098,11 +1098,14 @@ function aiState(mode,text,showApply){
 }
 async function readSlip(data){
   aiState('load','Reading your receipt…',false);
+  const controller = new AbortController();
+  const timeoutId = setTimeout(()=>controller.abort(), 25000);
   try{
     const small = await compress(data);
     const b64 = small.split(',')[1];
     const r = await fetch(WORKER_URL,{
       method:'POST', headers:{'Content-Type':'application/json'},
+      signal: controller.signal,
       body: JSON.stringify({
         model:'claude-sonnet-4-6', max_tokens:600,
         messages:[{role:'user',content:[
@@ -1126,6 +1129,7 @@ Rules for writing it:
       })
     });
     const d = await r.json();
+    clearTimeout(timeoutId);
     if(d.error){ aiState('err', d.error.message || 'Could not read that slip. Fill it in manually.', false); return; }
     const txt = (d.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('');
     aiData = JSON.parse(txt.replace(/```json|```/g,'').trim());
@@ -1134,7 +1138,12 @@ Rules for writing it:
     aiState('ok', bits.length ? 'Found: '+bits.join(' · ') : 'Receipt read', true);
     renderChips();
   }catch(err){
-    aiState('err','Could not read that slip automatically. Fill it in manually.', false);
+    clearTimeout(timeoutId);
+    if(err.name==='AbortError'){
+      aiState('err','Took too long to respond — the connection may have dropped. Try again or fill it in manually.', false);
+    }else{
+      aiState('err','Could not read that slip automatically. Fill it in manually.', false);
+    }
   }
 }
 function applyAI(){
