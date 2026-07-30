@@ -409,7 +409,7 @@
     Continue with Google
   </button>
   <p class="auth-foot">Protected finance workspace. Entries are logged against your name and synced to your own Drive.</p>
-  <p class="credit">Built in-house by WILDOCEANS IT</p>
+  <p class="credit">Built in-house by WILDOCEANS IT · build 20260730-1145</p>
 </div>
 
 <!-- ══ HOME ══ -->
@@ -735,7 +735,7 @@
     <details class="faq"><summary>Can I use this for a personal purchase by mistake?</summary><p>No — both the credit card and petty cash agreements are clear that personal spend is never permitted, including trips like an Uber from home to your usual work base. Any personal use is treated as a debt owed to WildTrust.</p></details>
     <details class="faq"><summary>My card was lost or possibly compromised — what first?</summary><p>Call Investec straight away on 0860 110 161 (+27 11 286 9663 from abroad) to stop the card, then get a police case number and let your finance manager know.</p></details>
     <details class="faq"><summary>Who do I ask if I'm unsure about a rule?</summary><p>Your project manager or the finance team — both agreements are reviewed by them, and it's always better to check first than to have a claim rejected later.</p></details>
-    <p class="credit" style="margin-top:22px">Built in-house by WILDOCEANS IT</p>
+    <p class="credit" style="margin-top:22px">Built in-house by WILDOCEANS IT · build 20260730-1145</p>
   </div>
 </div>
 
@@ -893,10 +893,6 @@ function pickVote(n,d){
   $('voteChosen').style.display='block';
   $('vNum').textContent=n; $('vDesc').textContent=d;
   $('voteResults').classList.remove('show');
-  if(!project){
-    const p=d.split('-')[0].trim();
-    if(p){ project=p; $('fProject').value=p; }
-  }
 }
 function clearVote(){
   vote=null;
@@ -1204,7 +1200,7 @@ function askClear(){
 }
 
 /* ═══════════ DRIVE + SHEETS ═══════════ */
-const HEADERS = [['Transaction Date','Description','Debits (R)','Vote Number','Vote Description','Transaction Description (60 chars)','Project / Department','Category','Additional Comments','Receipt']];
+const HEADERS = [['Transaction Date','Description','Debits (R)','Vote Number','Vote Description','Transaction Description (60 chars)','Project / Department','Additional Comments','Receipt']];
 
 async function driveFolder(path){
   let parent='root';
@@ -1254,20 +1250,20 @@ async function ensureSheet(m){
   id=(await r.json()).spreadsheetId;
   localStorage.setItem(key,id);
   await gFetch(`https://www.googleapis.com/drive/v3/files/${id}?addParents=${folder}&removeParents=root&fields=id`,{method:'PATCH'});
-  await gFetch(`https://sheets.googleapis.com/v4/spreadsheets/${id}/values/Recon!A1:J1?valueInputOption=RAW`,
+  await gFetch(`https://sheets.googleapis.com/v4/spreadsheets/${id}/values/Recon!A1:I1?valueInputOption=RAW`,
     {method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({values:HEADERS})});
   return id;
 }
 function rowOf(e){
   return [e.date||'', e.merchant||'', e.amount||'', e.voteNum||'', e.voteDesc||'',
-          e.txdesc||'', e.project||'', e.category||'', e.comments||'',
+          e.txdesc||'', e.project||'', e.comments||'',
           e.slipDriveId?'Uploaded':(e.slipImage?'Pending':'None')];
 }
 async function writeSheet(m,id){
   const list=[...getEntries(m)].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
   if(!list.length) return 0;
-  await gFetch(`https://sheets.googleapis.com/v4/spreadsheets/${id}/values/Recon!A2:J2000:clear`,{method:'POST'});
-  await gFetch(`https://sheets.googleapis.com/v4/spreadsheets/${id}/values/Recon!A2:J${list.length+1}?valueInputOption=RAW`,
+  await gFetch(`https://sheets.googleapis.com/v4/spreadsheets/${id}/values/Recon!A2:I2000:clear`,{method:'POST'});
+  await gFetch(`https://sheets.googleapis.com/v4/spreadsheets/${id}/values/Recon!A2:I${list.length+1}?valueInputOption=RAW`,
     {method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({values:list.map(rowOf)})});
   return list.length;
 }
