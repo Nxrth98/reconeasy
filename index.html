@@ -1243,7 +1243,13 @@ async function ensureSheet(m){
   const ym=new Date().toISOString().slice(0,7);
   const key='re_sheet_'+m+'_'+ym;
   let id=localStorage.getItem(key);
-  if(id) return id;
+  if(id){
+    // Existing sheet from an older schema — refresh header and wipe any legacy trailing columns
+    await gFetch(`https://sheets.googleapis.com/v4/spreadsheets/${id}/values/Recon!A1:I1?valueInputOption=RAW`,
+      {method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({values:HEADERS})});
+    await gFetch(`https://sheets.googleapis.com/v4/spreadsheets/${id}/values/Recon!J1:Z1:clear`,{method:'POST'});
+    return id;
+  }
   const folder=await driveFolder(['ReconEasy',modName(m),ym]);
   const r=await gFetch('https://sheets.googleapis.com/v4/spreadsheets',{method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({properties:{title:`ReconEasy ${modName(m)} ${ym}`},sheets:[{properties:{title:'Recon'}}]})});
@@ -1262,7 +1268,7 @@ function rowOf(e){
 async function writeSheet(m,id){
   const list=[...getEntries(m)].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
   if(!list.length) return 0;
-  await gFetch(`https://sheets.googleapis.com/v4/spreadsheets/${id}/values/Recon!A2:I2000:clear`,{method:'POST'});
+  await gFetch(`https://sheets.googleapis.com/v4/spreadsheets/${id}/values/Recon!A2:Z5000:clear`,{method:'POST'});
   await gFetch(`https://sheets.googleapis.com/v4/spreadsheets/${id}/values/Recon!A2:I${list.length+1}?valueInputOption=RAW`,
     {method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({values:list.map(rowOf)})});
   return list.length;
