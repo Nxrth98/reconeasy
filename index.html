@@ -1060,7 +1060,13 @@ function setPhoto(data, isNew){
 function onPhoto(input){
   if(!input.files||!input.files[0]) return;
   const r=new FileReader();
-  r.onload=e=>{ photoData=e.target.result; setPhoto(photoData,true); readSlip(photoData); };
+  r.onload=async e=>{
+    // Compress once, immediately, so a full-resolution photo never sits in local storage.
+    // This is what previously caused saves to silently fail once storage filled up.
+    photoData = await compress(e.target.result, 1400, 0.7);
+    setPhoto(photoData,true);
+    readSlip(photoData);
+  };
   r.readAsDataURL(input.files[0]);
 }
 function compress(dataUrl,maxW=900,q=.6){
@@ -1174,17 +1180,21 @@ function saveEntry(){
   const base = { date, merchant, amount, txdesc, comments, project, category,
                  voteNum: vote?vote.number:'', voteDesc: vote?vote.description:'' };
 
-  if(editing && curId){
-    const i = list.findIndex(x=>x.id===curId);
-    if(i>=0) list[i] = {...list[i], ...base, slipImage: photoData||list[i].slipImage||null, updatedAt:Date.now()};
-    setEntries(mod,list); photoData=null;
-    toast('Entry updated');
-    goDetail(curId);
-  }else{
-    list.push({ id:uid(), ...base, slipImage: photoData||null, createdAt:Date.now() });
-    setEntries(mod,list); photoData=null;
-    toast('Entry saved');
-    goModule();
+  try{
+    if(editing && curId){
+      const i = list.findIndex(x=>x.id===curId);
+      if(i>=0) list[i] = {...list[i], ...base, slipImage: photoData||list[i].slipImage||null, updatedAt:Date.now()};
+      setEntries(mod,list); photoData=null;
+      toast('Entry updated');
+      goDetail(curId);
+    }else{
+      list.push({ id:uid(), ...base, slipImage: photoData||null, createdAt:Date.now() });
+      setEntries(mod,list); photoData=null;
+      toast('Entry saved');
+      goModule();
+    }
+  }catch(err){
+    toast('Could not save — your device storage may be full. Try syncing older entries to Drive, then clearing them.');
   }
 }
 function askDelete(){
