@@ -1224,20 +1224,27 @@ async function driveFolder(path){
   return parent;
 }
 async function uploadOne(e,folderId){
-  if(!e.slipImage) return null;
-  const b64=e.slipImage.split(',')[1];
-  const mime=(e.slipImage.match(/data:([^;]+)/)||[,'image/jpeg'])[1];
-  const ext=mime.includes('png')?'png':'jpg';
-  const name=`${e.date||'slip'}_${(e.merchant||'unknown')}_${e.id}.${ext}`.replace(/[^a-z0-9_.\-]/gi,'_');
+  if(!e.slipImage) return {ok:false, reason:'no-image'};
+  // Compress before upload — Drive's simple/multipart upload has a practical ~5MB ceiling,
+  // and laptop-selected photos are often much larger than phone camera captures.
+  const compressed = await compress(e.slipImage, 1600, 0.75);
+  const b64=compressed.split(',')[1];
+  const mime='image/jpeg';
+  const name=`${e.date||'slip'}_${(e.merchant||'unknown')}_${e.id}.jpg`.replace(/[^a-z0-9_.\-]/gi,'_');
   const bin=atob(b64), arr=new Uint8Array(bin.length);
   for(let i=0;i<bin.length;i++) arr[i]=bin.charCodeAt(i);
   const fd=new FormData();
   fd.append('metadata', new Blob([JSON.stringify({name,parents:[folderId]})],{type:'application/json'}));
   fd.append('file', new Blob([arr],{type:mime}));
-  const r=await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',
-    {method:'POST',headers:{Authorization:'Bearer '+token},body:fd});
-  const d=await r.json();
-  return d.id||null;
+  try{
+    const r=await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',
+      {method:'POST',headers:{Authorization:'Bearer '+token},body:fd});
+    const d=await r.json();
+    if(d.id) return {ok:true, id:d.id};
+    return {ok:false, reason: d.error?.message || ('HTTP '+r.status)};
+  }catch(err){
+    return {ok:false, reason: err.message};
+  }
 }
 async function ensureSheet(m){
   const ym=new Date().toISOString().slice(0,7);
@@ -1295,15 +1302,18 @@ async function uploadSlips(){
     else{
       const ym=new Date().toISOString().slice(0,7);
       const folder=await driveFolder(['ReconEasy',modName(mod),ym,'receipts']);
-      let n=0;
+      let n=0, firstFail=null;
       for(const e of todo){
-        const did=await uploadOne(e,folder);
-        if(did){ e.slipDriveId=did; n++; }
+        const res=await uploadOne(e,folder);
+        if(res.ok){ e.slipDriveId=res.id; n++; }
+        else if(!firstFail) firstFail=res.reason;
       }
       setEntries(mod,all);
-      toast(n+' receipts uploaded to Drive');
+      if(n>0 && !firstFail) toast(n+' receipts uploaded to Drive');
+      else if(n>0 && firstFail) toast(`${n} uploaded, ${todo.length-n} failed — ${firstFail}`);
+      else toast('Upload failed — '+(firstFail||'unknown error'));
     }
-  }catch(e){ toast('Upload failed — try again'); }
+  }catch(e){ toast('Upload failed — '+e.message); }
   b.disabled=false; b.textContent='Upload';
 }
 async function syncAll(){
