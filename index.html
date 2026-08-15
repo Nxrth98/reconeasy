@@ -330,6 +330,14 @@
   .sheet{background:var(--page);border-radius:28px 28px 0 0;padding:10px 24px calc(28px + env(safe-area-inset-bottom));width:100%;max-width:460px;margin:0 auto;animation:up .28s cubic-bezier(.2,.9,.3,1)}
   @keyframes up{from{transform:translateY(100%)}to{transform:none}}
   .grab{width:42px;height:4.5px;background:rgba(28,35,30,.14);border-radius:3px;margin:0 auto 20px}
+  .install-close{position:absolute;top:16px;right:16px;width:38px;height:38px}
+  .install-icon{width:52px;height:52px;border-radius:16px;background:var(--green-soft);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+  .install-icon svg{width:24px;height:24px;color:var(--green-deep)}
+  .install-steps{margin-top:18px}
+  .install-step{display:flex;align-items:center;gap:12px;font-size:14.5px;color:var(--ink);padding:10px 0;border-top:1px solid var(--field-line)}
+  .install-step:first-child{border-top:none}
+  .install-num{width:24px;height:24px;border-radius:var(--pill);background:var(--green-soft);color:var(--green-deep);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  #installOv .sheet{position:relative}
   .sheet h3{font-size:20px;font-weight:690;letter-spacing:-.028em;margin-bottom:8px}
   .sheet p{font-size:14.5px;color:var(--ink-2);line-height:1.5;margin-bottom:24px}
   .sheet-row{display:grid;grid-template-columns:1fr 1fr;gap:11px}
@@ -399,6 +407,29 @@
       <button class="btn btn-ghost" onclick="closeOv()">Cancel</button>
       <button class="btn btn-danger" id="ovGo">Delete</button>
     </div>
+  </div>
+</div>
+
+<!-- ══ INSTALL PROMPT ══ -->
+<div class="ov" id="installOv">
+  <div class="sheet">
+    <button class="icon-btn install-close" onclick="closeInstallPrompt()" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="install-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+    <h3>Add ReconEasy to your Home Screen</h3>
+    <p>Opens full-screen with its own icon, just like a real app &mdash; no browser bar, no need to open a link every time.</p>
+    <div id="installStepsIOS" class="install-steps">
+      <div class="install-step"><span class="install-num">1</span>Tap the <b>Share</b> icon in Safari</div>
+      <div class="install-step"><span class="install-num">2</span>Scroll down and tap <b>Add to Home Screen</b></div>
+      <div class="install-step"><span class="install-num">3</span>Tap <b>Add</b> to install</div>
+    </div>
+    <div id="installStepsAndroid" class="install-steps" style="display:none">
+      <div class="install-step"><span class="install-num">1</span>Tap the <b>⋮</b> menu in Chrome</div>
+      <div class="install-step"><span class="install-num">2</span>Tap <b>Add to Home screen</b></div>
+      <div class="install-step"><span class="install-num">3</span>Tap <b>Add</b> / <b>Install</b></div>
+    </div>
+    <button class="btn btn-ghost" style="margin-top:20px" onclick="closeInstallPrompt()">Maybe later</button>
   </div>
 </div>
 
@@ -831,7 +862,27 @@ function signedIn(){
   $('greetName').textContent = last ? first+' '+last[0]+'.' : first;
   goHome();
   loadVotes();
+  maybeShowInstallPrompt();
 }
+
+/* ── INSTALL PROMPT ── */
+function isStandalone(){
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+function maybeShowInstallPrompt(){
+  if(isStandalone()) return; // already installed — never nag
+  if(localStorage.getItem('re_install_dismissed')) return; // already dismissed once
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  $('installStepsIOS').style.display = isIOS ? '' : 'none';
+  $('installStepsAndroid').style.display = isIOS ? 'none' : '';
+  setTimeout(()=>{ $('installOv').classList.add('show'); }, 900); // small delay so it doesn't fight the sign-in transition
+}
+function closeInstallPrompt(){
+  $('installOv').classList.remove('show');
+  localStorage.setItem('re_install_dismissed', '1');
+}
+$('installOv').addEventListener('click', e=>{ if(e.target.id==='installOv') closeInstallPrompt(); });
+
 function confirmSignOut(){
   openOv('Sign out?','Your saved entries stay on this device. You can sign back in any time.','Sign out',()=>{
     token=null; user=null;
