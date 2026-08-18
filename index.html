@@ -37,6 +37,7 @@
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html,body{height:100%}
+  html{background:#ECE7DA}
   body{
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,system-ui,sans-serif;
     color:var(--ink);
@@ -44,6 +45,13 @@
     min-height:100vh;max-width:460px;margin:0 auto;
     -webkit-font-smoothing:antialiased;
     letter-spacing:-.011em;
+  }
+  @media (min-width:481px){
+    body{
+      border-left:1px solid rgba(22,33,26,.14);
+      border-right:1px solid rgba(22,33,26,.14);
+      box-shadow:0 0 46px rgba(22,33,26,.07);
+    }
   }
   .screen{display:none;padding:0 22px calc(40px + env(safe-area-inset-bottom))}
   .screen.active{display:block;animation:fade .26s ease}
@@ -759,6 +767,17 @@
       <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>The card is for <b>work purposes only</b> and has a set monthly limit — get your manager's sign-off before spending, not after.</p></div>
       <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Personal expenses are <b>never</b> allowed on the card — this includes things like an Uber from home to your normal work base.</p></div>
       <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Issuing the card is a privilege, not a right — it can be withdrawn at any time, and unexplained spend is deducted from your salary.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>First card? You'll need a clean background check as well as completed probation — any exception needs written CEO/COO approval.</p></div>
+    </div>
+    <div class="rulegroup">
+      <h5>What the card can't be used for</h5>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Toiletries and other personal items are off-limits on the card, even small ones.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Medical items like Panado or Disprin need pre-approval and a written reason before you buy them.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Buying alcohol — e.g. for hosting a donor — needs sign-off from a senior manager, director or the COO/CEO first.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Bought a small asset under R5,000 on the card, like a tool? Declare it to the Procurement Manager so it's added to the insurance and asset registers.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Subscriptions like ChatGPT or Adobe need pre-approval from a senior manager, director or the COO/CEO before you sign up.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Vehicle repairs or servicing can only go on the card once the Fleet Manager has signed off, and the invoice must show the vehicle's registration number.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Catering or event invoices need the event date and headcount shown, plus sign-off from your line manager and budget holder.</p></div>
     </div>
     <div class="rulegroup">
       <h5>Keeping it secure</h5>
@@ -766,12 +785,17 @@
       <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Never send the full 16-digit number or CVV by email or WhatsApp — only the last 4 digits, and only when Finance needs them.</p></div>
       <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Watch your transaction SMSes closely — report anything unusual to the bank immediately, then to your finance manager.</p></div>
       <div class="rule warn"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><p><b>Card lost or stolen?</b> Call Investec on <b>0860 110 161</b> (or +27 11 286 9663 abroad) immediately to stop it, then get a police case number and tell your finance manager.</p></div>
+      <div class="rule warn"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><p>Falsifying receipts, inflating amounts or claiming personal spend as Trust spend is treated as misconduct under the Trust's disciplinary process.</p></div>
     </div>
     <div class="rulegroup">
       <h5>Slips &amp; deadlines</h5>
       <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Original slips and vouchers are due to Finance by the <b>6th of every month</b> for the previous month's statement.</p></div>
       <div class="rule warn"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><p>A speedpoint slip alone isn't enough — you need the actual invoice or till slip too, or it will be rejected.</p></div>
       <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Travelling internationally? Contact Investec at least <b>two weeks</b> ahead — they'll need your passport, ticket and travel details.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Paying a tip? Write the actual tip amount on the slip.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Going over the R500 monthly speedpoint-slip limit needs a written motivation approved by the CEO or their delegate.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Lost your slips to theft? You'll need a police affidavit for the finance team, or the amount may be recovered from your salary.</p></div>
+      <div class="rule warn"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><p>Repeated missed deadlines or holding a large, unexplained petty cash balance can lead to your card being suspended.</p></div>
     </div>
   </div>
 
@@ -784,17 +808,36 @@
       <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>New to holding petty cash? A background check is required first, and you'll be issued your own petty cash vote number.</p></div>
     </div>
     <div class="rulegroup">
+      <h5>Limits</h5>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Petty cash draws shouldn't exceed <b>R20,000 a month</b> — anything more needs your line manager's motivation, reviewed by Finance.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>A single petty cash transaction is capped at <b>R5,000</b>. Going over that needs written manager approval, reviewed by Finance.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>No spend this month? Submit a blank recon anyway — even if you only drew cash and didn't use it.</p></div>
+    </div>
+    <div class="rulegroup">
       <h5>Getting a valid slip</h5>
       <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>A till slip or invoice is required at the point of sale — it's on you to make sure you're given one.</p></div>
       <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Handwritten invoices are allowed, but only if they include: supplier's name &amp; address, WILDTRUST as the buyer (plus VAT numbers if vatable), a 10-digit contact number, an ID or registration number, the date, what was bought, and a signature or stamp.</p></div>
       <div class="rule warn"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><p>No slip available at all (e.g. informal transport)? Get a written, signed note from the provider with their contact details, and countersign it yourself.</p></div>
       <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Affidavits for a missing slip are only accepted for theft or genuinely exceptional cases — not for a slip you simply misplaced.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Keep descriptions to 60 characters, but always cover what was bought, the event or workshop, and who it was for.</p></div>
     </div>
     <div class="rulegroup">
       <h5>Deadlines &amp; balances</h5>
       <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Your recon, signed off by your manager, is due to Finance by the <b>6th of every month</b>.</p></div>
       <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Passing petty cash to a colleague? Both of you sign a petty cash receipt, and it must go in with your monthly recon.</p></div>
       <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Holding more than <b>R2,000</b> in cash can be flagged for review — keep your balance reconciled and don't let it build up.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Missing a slip? You get about 45 days to track it down before the amount is recovered from your salary.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Recurring payments, like a monthly cleaning fee, can't go through petty cash more than once — repeat suppliers must be registered vendors instead (grocers and restaurants are the exception).</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Petty cash can't be deposited into your personal bank account, except in pre-approved cases for remote-area work.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Registered Trust vendors can't be paid via petty cash without written sign-off from the Finance Director or CEO.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Bought a small asset under R5,000 with petty cash, like a tool? Declare it to the Procurement Manager for the insurance and asset registers.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Leaving the Trust? Your petty cash balance is either paid back to you or deducted from your final pay.</p></div>
+    </div>
+    <div class="rulegroup">
+      <h5>Travelling with petty cash</h5>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Using petty cash abroad needs advance approval from your manager and the CEO — record it in rands using the exchange rate at the time.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Petty cash abroad is for work only — no sightseeing or personal shopping — and receipts must be translated into English.</p></div>
+      <div class="rule"><div class="rule-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg></div><p>Lost or stolen petty cash abroad? Report it to your manager and, where possible, local authorities — then file a police affidavit on your return.</p></div>
     </div>
   </div>
 
@@ -808,6 +851,8 @@
     <details class="faq"><summary>Can I use this for a personal purchase by mistake?</summary><p>No — both the credit card and petty cash agreements are clear that personal spend is never permitted, including trips like an Uber from home to your usual work base. Any personal use is treated as a debt owed to WildTrust.</p></details>
     <details class="faq"><summary>My card was lost or possibly compromised — what first?</summary><p>Call Investec straight away on 0860 110 161 (+27 11 286 9663 from abroad) to stop the card, then get a police case number and let your finance manager know.</p></details>
     <details class="faq"><summary>Who do I ask if I'm unsure about a rule?</summary><p>Your project manager or the finance team — both agreements are reviewed by them, and it's always better to check first than to have a claim rejected later.</p></details>
+    <details class="faq"><summary>I bought a small tool or asset — do I need to do anything else?</summary><p>Yes — if it's under R5,000 on card or petty cash, let the Procurement Manager know so it's added to the insurance and asset registers.</p></details>
+    <details class="faq"><summary>Is there a limit on how much petty cash I can hold or spend?</summary><p>Yes — R20,000 a month in draws, and R5,000 per transaction. Anything above that needs your manager's written motivation, reviewed by Finance.</p></details>
     <p class="credit" style="margin-top:22px">© 2026 WILDOCEANS IT. All rights reserved.</p>
   </div>
 </div>
