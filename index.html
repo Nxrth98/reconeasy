@@ -955,19 +955,29 @@ async function loadVotes(){
   if(!VOTE_DB.length){ VOTE_DB = VOTE_FALLBACK; buildProjects(); }
   if(!token) return;
   try{
-    const out=[];
-    for(const tab of SHEET_TABS){
+    let anyFailed = false;
+    const results = await Promise.all(SHEET_TABS.map(async tab=>{
+      const controller = new AbortController();
+      const timeoutId = setTimeout(()=>controller.abort(), 12000);
       try{
-        const r = await gFetch(`https://sheets.googleapis.com/v4/spreadsheets/${VOTE_SHEET_ID}/values/${encodeURIComponent(tab)}!A:B`);
+        const r = await gFetch(`https://sheets.googleapis.com/v4/spreadsheets/${VOTE_SHEET_ID}/values/${encodeURIComponent(tab)}!A:B`, {signal: controller.signal});
+        clearTimeout(timeoutId);
+        if(!r.ok){ anyFailed = true; return []; }
         const d = await r.json();
-        (d.values||[]).forEach(row=>{
-          if(row[0] && row[1] && !/^vote\s*number$/i.test(row[0])) out.push({number:String(row[0]).trim(), description:String(row[1]).trim()});
-        });
-      }catch(e){}
-    }
-    if(out.length){
+        return (d.values||[]).filter(row=>row[0] && row[1] && !/^vote\s*number$/i.test(row[0]))
+          .map(row=>({number:String(row[0]).trim(), description:String(row[1]).trim()}));
+      }catch(e){ clearTimeout(timeoutId); anyFailed = true; return []; }
+    }));
+    const out = results.flat();
+    // Only replace the working list if every single tab loaded successfully —
+    // a partial result (some tabs timed out on a slow connection) must never
+    // silently overwrite a complete list with an incomplete one.
+    if(out.length && !anyFailed){
       VOTE_DB = out; buildProjects();
       localStorage.setItem('re_votes', JSON.stringify(out));
+      toast(out.length+' votes loaded');
+    }else if(anyFailed && cached){
+      // Some tabs failed — keep showing the last known-good complete list, try again silently next time
     }
   }catch(e){}
 }
