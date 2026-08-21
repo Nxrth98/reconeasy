@@ -201,6 +201,8 @@
   }
   .thumb img{width:100%;height:100%;object-fit:cover}
   .thumb svg{width:22px;height:22px;color:var(--green)}
+  .thumb-pdf{flex-direction:column;gap:1px}
+  .thumb-pdf span{font-size:8.5px;font-weight:800;letter-spacing:.03em;color:var(--green-deep)}
   .entry-body{flex:1;min-width:0}
   .entry-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
   .entry-name{font-size:16px;font-weight:650;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -242,6 +244,19 @@
     text-align:center;font-size:13.5px;font-weight:600;color:var(--green);
     margin:-10px 0 20px;cursor:pointer;display:none;
   }
+  .upload-alt{
+    display:flex;align-items:center;justify-content:center;gap:7px;
+    text-align:center;font-size:13.5px;font-weight:600;color:var(--ink-2);
+    margin:-10px 0 20px;cursor:pointer;position:relative;
+  }
+  .upload-alt svg{width:16px;height:16px}
+  .upload-alt input[type=file]{position:absolute;inset:0;opacity:0;font-size:0;cursor:pointer}
+  .pdf-card{
+    width:100%;padding:34px 20px;display:flex;flex-direction:column;align-items:center;gap:8px;
+    background:var(--green-soft);border-radius:var(--r-lg);
+  }
+  .pdf-card svg{width:34px;height:34px;color:var(--green-deep)}
+  .pdf-card span{font-size:13.5px;font-weight:650;color:var(--ink)}
 
   .ai{
     display:flex;align-items:center;gap:12px;border-radius:var(--r-md);
@@ -338,6 +353,12 @@
   .dv.mono{font-variant-numeric:tabular-nums;font-weight:640;color:var(--green)}
   .dv.big{font-size:27px;font-weight:730;letter-spacing:-.03em}
   .dimg{width:100%;border-radius:var(--r-lg);margin-bottom:16px;display:block;max-height:250px;object-fit:cover}
+  .dpdf{
+    width:100%;padding:20px;margin-bottom:16px;border-radius:var(--r-lg);background:var(--green-soft);
+    display:flex;align-items:center;gap:10px;color:var(--green-deep);font-size:14px;font-weight:650;
+    text-decoration:none;
+  }
+  .dpdf svg{width:22px;height:22px;flex-shrink:0}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 
   /* ── STATS ── */
@@ -595,9 +616,14 @@
     <input type="file" accept="image/*" capture="environment" id="slipInput" onchange="onPhoto(this)">
     <div class="cap-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3.5"/></svg></div>
     <div class="cap-t">Capture receipt</div>
-    <div class="cap-s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="2.5"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>or choose from gallery</div>
+    <div class="cap-s">Tap to take a photo</div>
   </div>
   <div class="retake" id="retake" onclick="document.getElementById('slipInput').click()">Retake photo</div>
+  <div class="upload-alt" id="uploadAlt">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    <span id="uploadAltTxt">Upload a file instead (photo or PDF)</span>
+    <input type="file" accept="image/*,application/pdf" id="fileInput" onchange="onPhoto(this)">
+  </div>
 
   <div class="ai" id="aiBar">
     <div class="ai-ic" id="aiIc"></div>
@@ -683,6 +709,7 @@
   </div>
 
   <img class="dimg" id="dImg" style="display:none" alt="">
+  <a class="dpdf" id="dPdf" style="display:none" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14.5 4h-9A2.5 2.5 0 0 0 3 6.5v11A2.5 2.5 0 0 0 5.5 20h13a2.5 2.5 0 0 0 2.5-2.5V9L14.5 4Z"/><polyline points="14 4 14 9 20 9"/></svg>Open PDF receipt</a>
 
   <div class="dcard"><div class="dk">Amount</div><div class="dv big" id="dAmt"></div></div>
   <div class="row2">
@@ -1229,7 +1256,9 @@ function renderList(){
   }
   $('listWrap').innerHTML = list.map(e=>{
     const thumb = e.slipImage
-      ? `<div class="thumb"><img src="${e.slipImage}" alt=""></div>`
+      ? (isPdfData(e.slipImage)
+          ? `<div class="thumb thumb-pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14.5 4h-9A2.5 2.5 0 0 0 3 6.5v11A2.5 2.5 0 0 0 5.5 20h13a2.5 2.5 0 0 0 2.5-2.5V9L14.5 4Z"/><polyline points="14 4 14 9 20 9"/></svg><span>PDF</span></div>`
+          : `<div class="thumb"><img src="${e.slipImage}" alt=""></div>`)
       : `<div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>`;
     const d = e.date ? new Date(e.date+'T00:00:00').toLocaleDateString('en-ZA',{day:'2-digit',month:'short',year:'numeric'}) : 'No date';
     const voteBit = (e.splits && e.splits.length>=2) ? ' · Split '+e.splits.length+' ways' : (e.voteNum?' · '+esc(e.voteNum):'');
@@ -1281,7 +1310,7 @@ function goCapture(id){
       }else if(e.voteNum){
         pickVote(e.voteNum, e.voteDesc||'');
       }
-      if(e.slipImage) setPhoto(e.slipImage, false);
+      if(e.slipImage) setPhoto(e.slipImage, false, isPdfData(e.slipImage));
       updCount(); renderChips();
     }
   }
@@ -1321,7 +1350,15 @@ function goDetail(id){
   $('dComm').textContent = e.comments||'—';
   $('dCommWrap').style.display = e.comments ? 'block' : 'none';
   $('dDrive').textContent = e.slipDriveId ? 'Uploaded' : (e.slipImage ? 'On this device — not yet uploaded' : 'No receipt attached');
-  if(e.slipImage){ $('dImg').src=e.slipImage; $('dImg').style.display='block'; } else $('dImg').style.display='none';
+  if(e.slipImage && isPdfData(e.slipImage)){
+    $('dImg').style.display='none';
+    $('dPdf').style.display='flex'; $('dPdf').href=e.slipImage;
+  }else if(e.slipImage){
+    $('dImg').src=e.slipImage; $('dImg').style.display='block';
+    $('dPdf').style.display='none';
+  }else{
+    $('dImg').style.display='none'; $('dPdf').style.display='none';
+  }
   show('detail');
 }
 function editEntry(){ goCapture(curId); }
@@ -1338,33 +1375,56 @@ function guideTab(name, btn){
 }
 
 /* ═══════════ PHOTO + AI ═══════════ */
+function isPdfData(d){ return !!d && d.indexOf('data:application/pdf')===0; }
 function resetPhoto(){
   const z=$('capzone');
   z.classList.remove('filled');
   const img=z.querySelector('img'); if(img) img.remove();
+  const pdfCard=z.querySelector('.pdf-card'); if(pdfCard) pdfCard.remove();
   z.querySelectorAll('.cap-btn,.cap-t,.cap-s').forEach(el=>el.style.display='');
   $('retake').style.display='none';
 }
-function setPhoto(data, isNew){
+function setPhoto(data, isNew, isPdf){
   const z=$('capzone');
   z.classList.add('filled');
   z.querySelectorAll('.cap-btn,.cap-t,.cap-s').forEach(el=>el.style.display='none');
   let img=z.querySelector('img');
-  if(!img){ img=document.createElement('img'); z.prepend(img); }
-  img.src=data;
+  let pdfCard=z.querySelector('.pdf-card');
+  if(isPdf){
+    if(img) img.remove();
+    if(!pdfCard){
+      pdfCard=document.createElement('div');
+      pdfCard.className='pdf-card';
+      pdfCard.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14.5 4h-9A2.5 2.5 0 0 0 3 6.5v11A2.5 2.5 0 0 0 5.5 20h13a2.5 2.5 0 0 0 2.5-2.5V9L14.5 4Z"/><polyline points="14 4 14 9 20 9"/></svg><span>PDF attached</span>';
+      z.prepend(pdfCard);
+    }
+  }else{
+    if(pdfCard) pdfCard.remove();
+    if(!img){ img=document.createElement('img'); z.prepend(img); }
+    img.src=data;
+  }
   $('retake').style.display='block';
 }
 function onPhoto(input){
   if(!input.files||!input.files[0]) return;
+  const file=input.files[0];
+  const isPdf=file.type==='application/pdf';
   const r=new FileReader();
   r.onload=async e=>{
-    // Compress once, immediately, so a full-resolution photo never sits in local storage.
-    // This is what previously caused saves to silently fail once storage filled up.
-    photoData = await compress(e.target.result, 1400, 0.7);
-    setPhoto(photoData,true);
-    readSlip(photoData);
+    if(isPdf){
+      // PDFs are stored as-is — canvas-based compress() only works on raster images.
+      photoData = e.target.result;
+      setPhoto(photoData,true,true);
+      readSlip(photoData,'application/pdf');
+    }else{
+      // Compress once, immediately, so a full-resolution photo never sits in local storage.
+      // This is what previously caused saves to silently fail once storage filled up.
+      photoData = await compress(e.target.result, 1400, 0.7);
+      setPhoto(photoData,true,false);
+      readSlip(photoData);
+    }
   };
-  r.readAsDataURL(input.files[0]);
+  r.readAsDataURL(file);
 }
 function compress(dataUrl,maxW=900,q=.6){
   return new Promise(res=>{
@@ -1395,20 +1455,23 @@ function aiState(mode,text,showApply){
   $('aiTx').textContent = text;
   $('aiDo').style.display = showApply ? 'block' : 'none';
 }
-async function readSlip(data){
+async function readSlip(data, mime){
+  const isPdf = mime==='application/pdf';
   aiState('load','Reading your receipt…',false);
   const controller = new AbortController();
   const timeoutId = setTimeout(()=>controller.abort(), 25000);
   try{
-    const small = await compress(data);
-    const b64 = small.split(',')[1];
+    const b64 = isPdf ? data.split(',')[1] : (await compress(data)).split(',')[1];
+    const contentBlock = isPdf
+      ? {type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}}
+      : {type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}};
     const r = await fetch(WORKER_URL,{
       method:'POST', headers:{'Content-Type':'application/json'},
       signal: controller.signal,
       body: JSON.stringify({
         model:'claude-sonnet-4-6', max_tokens:600,
         messages:[{role:'user',content:[
-          {type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},
+          contentBlock,
           {type:'text',text:`Read this South African receipt for an NGO expense reconciliation. Reply with ONLY a JSON object, no markdown fences, no commentary:
 {"merchant":"clean merchant name, max 40 chars","amount":"total paid, digits and decimal point only, no R symbol","date":"YYYY-MM-DD if visible else null","category":"exactly one of: ${CATEGORIES.join(' | ')}","description":"60-character-max transaction description written in WildOceans house style, see rules below"}
 
@@ -1544,12 +1607,14 @@ async function driveFolder(path){
 }
 async function uploadOne(e,folderId){
   if(!e.slipImage) return {ok:false, reason:'no-image'};
+  const isPdf = isPdfData(e.slipImage);
   // Compress before upload — Drive's simple/multipart upload has a practical ~5MB ceiling,
   // and laptop-selected photos are often much larger than phone camera captures.
-  const compressed = await compress(e.slipImage, 1600, 0.75);
-  const b64=compressed.split(',')[1];
-  const mime='image/jpeg';
-  const name=`${e.date||'slip'}_${(e.merchant||'unknown')}_${e.id}.jpg`.replace(/[^a-z0-9_.\-]/gi,'_');
+  // PDFs are stored as-is — compress() only works on raster images.
+  const b64 = isPdf ? e.slipImage.split(',')[1] : (await compress(e.slipImage, 1600, 0.75)).split(',')[1];
+  const mime = isPdf ? 'application/pdf' : 'image/jpeg';
+  const ext = isPdf ? 'pdf' : 'jpg';
+  const name=`${e.date||'slip'}_${(e.merchant||'unknown')}_${e.id}.${ext}`.replace(/[^a-z0-9_.\-]/gi,'_');
   const bin=atob(b64), arr=new Uint8Array(bin.length);
   for(let i=0;i<bin.length;i++) arr[i]=bin.charCodeAt(i);
   const fd=new FormData();
